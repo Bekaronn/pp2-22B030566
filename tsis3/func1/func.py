@@ -3,10 +3,14 @@ def conver(grams):
 
 print(conver(int(input())))
 
+
+
 def calc(F):
     return (5 / 9) * (F - 32)
 
 print(calc(int(input())))
+
+
 
 def func(x,y):
     if(y/4==x):
@@ -24,23 +28,47 @@ l = x-func(x,y)
 print(h)
 print(l)
 
+
+
 def filter_prime(x):
     y = []
     for i in range(0,len(x)):
-        u = True
         for j in range(2,int(x[i]/2)):
             if(x[i]%j==0):
                 u = False
                 break
-        if u == True:
+        else:
             y.insert(0,x[i])
-        
-    return y            
+    return y
     
         
 x = [1,2,3,4,5,6,7,8,9,10,11]
 y = filter_prime(x)
 print(y)
+
+
+
+def swap(ch, i, j):
+    temp = ch[i]
+    ch[i] = ch[j]
+    ch[j] = temp
+
+def permutations(ch, curr_index=0):
+ 
+    if curr_index == len(ch) - 1:
+        print(''.join(ch))
+ 
+    for i in range(curr_index, len(ch)):
+        swap(ch, curr_index, i)
+        permutations(ch, curr_index + 1)
+        swap(ch, curr_index, i)
+
+if __name__ == '__main__':
+ 
+    s = 'ABC'
+    permutations(list(s))
+
+
 
 def rev(a):
     b = (a).split()
@@ -55,17 +83,20 @@ a = "We are ready"
 b = rev(a)
 print(b)
 
+
+
 def num(a):
     for i in range(0,len(a)):
         if(a[i]==3):
             if(a[i+1]==3):
                 return True
     return False
-    
 
 a = [1,3,3,1]
 x = num(a)
 print(x)
+
+
 
 def spy_game(nums):
     x = 2
@@ -80,10 +111,10 @@ def spy_game(nums):
     return False
 
 print(spy_game([1,2,4,0,0,7,5]))
-
 print(spy_game([1,0,2,4,0,5,7]))
-
 print(spy_game([1,7,2,0,4,5,0]))
+
+
 
 import math
 
@@ -92,13 +123,18 @@ def comp(a):
 
 print(comp(5))
 
-def uni(x):
-    y = [x[0],]
-    for i range(0,len(x)):
-        if
 
-x = uni([3,3,3,4,1,3,7,8,1,9,3,3,4,5,0,4,10])
-print(x)
+
+def uniq(numbers):
+    u = []
+    for item in numbers :
+        if item not in u:
+            u.append(item)
+    return u
+
+print(uniq([3,3,3,4,1,3,7,8,1,9,3,3,4,5,0,4,10]))
+
+
 
 def palind(s):
     size = int(len(s)/2)
@@ -110,6 +146,8 @@ def palind(s):
 x = input()
 print(palind(x))
 
+
+
 def histo(x):
     for i in range(0,len(x)):
         for j in range(0,x[i]):
@@ -118,11 +156,14 @@ def histo(x):
 
 histo([5,6,3])
 
+import random
+
 x = True
 name = input("Hello what is your name?")
 print(f"Well, {name}, I am thinking of a number between 1 and 20.")
+print("Take a guess.")
 y = random.randint(1,20)
-cnt = 0;
+cnt = 0
 while x:
     num = int(input())
     cnt += 1
@@ -134,3 +175,4 @@ while x:
         print("Take a guess")
     else:
         print(f"Good job, KBTU! You guessed my number in {cnt} guesses!")
+        x = False

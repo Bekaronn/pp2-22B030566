@@ -12,18 +12,28 @@ st.printString()
 
 
 class Shape:
+    x = 0
+    y = 0
     def area(self):
-        print(0)
+        return self.x * self.y
     
 
 class Square(Shape):
     def __init__(self,length):
-        self.length = length
+        Shape.x = length
+        Shape.y = self.x
 
 class Rectangle(Shape):
     def __init__(self,length,width):
-        self.length = length
-        self.width = width
+        Shape.x = length
+        Shape.y = width
+
+sq = Square(int(input()))
+s = Shape()
+print(s.area())
+
+rc = Rectangle(int(input()),int(input()))
+print(s.area())
 
 
 class Point:
@@ -45,22 +55,43 @@ p.dist()
 p.move(10,5)
 p.dist()
 
+def filter(ls):
+    l = []
+    for x in range(0,len(ls)):
+        for i in range(2,int(ls[x]/2)):
+            if ls[x]%i==0:
+                t = False
+                break
+        else:
+            l.append(ls[x])
+    return l
+
+
+ls = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+t = filter(ls)
+print(t)
 
 class Account:
-    owner = ""
-    balance = 0
+    def __init__(self,owner,balance=0):
+        self.owner = owner
+        self.balance = balance
+        
+    def __str__(self):
+        return f'Owner: {self.owner}  Account balance: {self.balance}$'
+        
     def deposit(self,dep):
-        self.dep = dep
         self.balance += dep
+        print('Deposit')
+        
+    def withdraw(self,wid):
+        if self.balance >= wid:
+            self.balance -= wid
+            print('Withdraw')
+        else:
+            print('Not enough money')
 
-    def withdraw(self,wit):
-        self.wit = wit
-        self.balance -= wit
-        print(self.balance)
-
-bank = Account()
-
-bank.deposit(int(input()))
-
-bank.withdraw(int(input()))
+acc = Account("Beka", 100)
+acc.deposit(100)
+acc.withdraw(1000)
+print(acc)
 
