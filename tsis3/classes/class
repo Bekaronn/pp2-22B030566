@@ -1,0 +1,66 @@
+class String:
+    def getString(self, str):
+        self.str = str
+
+    def printString(self):
+        print((self.str).upper())
+
+st = String()
+st.getString(input())
+st.printString()
+
+
+
+class Shape:
+    def area(self):
+        print(0)
+    
+
+class Square(Shape):
+    def __init__(self,length):
+        self.length = length
+
+class Rectangle(Shape):
+    def __init__(self,length,width):
+        self.length = length
+        self.width = width
+
+
+class Point:
+    def move(self,x,y):
+        self.x = x
+        self.y = y
+
+    def show(self):
+        print(str(self.x) + ' ' + str(self.y))
+
+    def dist(self):
+        print(abs(self.y-self.x))
+
+p = Point()
+
+p.move(1,2)
+p.show()
+p.dist()
+p.move(10,5)
+p.dist()
+
+
+class Account:
+    owner = ""
+    balance = 0
+    def deposit(self,dep):
+        self.dep = dep
+        self.balance += dep
+
+    def withdraw(self,wit):
+        self.wit = wit
+        self.balance -= wit
+        print(self.balance)
+
+bank = Account()
+
+bank.deposit(int(input()))
+
+bank.withdraw(int(input()))
+
