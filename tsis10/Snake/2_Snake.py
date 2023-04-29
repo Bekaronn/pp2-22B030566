@@ -1,6 +1,44 @@
 #Imports
 import pygame, sys, time, random
-from pygame import *
+from pygame.locals import *
+import psycopg2
+
+#postgreSQL
+def connect(username, score, level):
+    conn = None
+
+    try:
+        conn = psycopg2.connect(host="localhost", database="snake", user="postgres", password="1234")
+        conn.autocommit = True
+
+        with conn.cursor() as cursor:
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS user_score (
+            username VARCHAR(32) NOT NULL,
+            score VARCHAR(100) NOT NULL,
+            level VARCHAR(100) NOT NULL
+            )""")
+        
+        if score != -1:
+            with conn.cursor() as cursor:
+                cursor.execute("INSERT INTO user_score (username, score, level) VALUES('{}','{}',{})".format(username, score, level))
+        else:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT * FROM user_score WHERE username = '{}'".format(username))
+                data = cursor.fetchone()
+                print(data[0],"max score",data[1])
+                print(data[0],"max level",data[2])
+
+    except:
+        print("Error to connect")
+    finally:
+        if conn is not None:
+            pass
+
+
+print("Print your username:")
+username = input()
+connect(username, -1, -1)
 
 #Initialzing
 pygame.init()
@@ -66,13 +104,13 @@ def show_score(self, color, font, size):
     screen.blit(score_surface, (0,0))
     screen.blit(level_surface, (100,0))
 
-
 #Game Loop
 while True:
     screen.fill((0,0,0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            connect(username, Score, Level)
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN  and event.key == K_UP and Direction!='DOWN':
@@ -83,6 +121,7 @@ while True:
             Direction = 'RIGHT'
         if event.type == pygame.KEYDOWN  and event.key == K_LEFT and Direction!='RIGHT':
             Direction = 'LEFT'
+
 
     if Direction == 'UP':
         Snake_head[0] -= Pixel
@@ -95,12 +134,14 @@ while True:
 
     #Check wall
     if Snake_head[0] < 0 or Snake_head[0] > 40*Pixel or Snake_head[1] < 0 or Snake_head[1] > 40*Pixel:
+        connect(username, Score, Level)
         pygame.quit()
         sys.exit()
     for pos in Snake_body:
         if pos[0] == Snake_body[0][0] and pos[1] == Snake_body[0][1]:
             continue
         if Snake_head[0] == pos[0] and Snake_head[1] == pos[1]:
+            connect(username, Score, Level)
             pygame.quit()
             sys.exit()
     
@@ -136,4 +177,3 @@ while True:
     #Update and FPS
     pygame.display.update()
     FramePerSec.tick(Snake_speed)
-    

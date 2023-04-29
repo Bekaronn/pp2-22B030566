@@ -1,5 +1,5 @@
 import psycopg2
-from config import config
+import csv
 
 def connect():
     conn = None
@@ -23,8 +23,7 @@ def connect():
         dl = input()
 
     try:
-        params = config()
-        conn = psycopg2.connect(**params)
+        conn = psycopg2.connect(host="localhost", database="suppliers", user="postgres", password="1234")
 
         conn.autocommit = True
 
@@ -33,14 +32,19 @@ def connect():
             version = cursor.fetchone()
             print(version)
 
-        # with conn.cursor() as cursor:
-        #     cursor.execute("""
-        #     CREATE TABLE phonebook (
-        #     first_name VARCHAR(255) NOT NULL,
-        #     last_name VARCHAR(255) NOT NULL,
-        #     phone VARCHAR(11) UNIQUE NOT NULL
-        #     )
-        #     """)
+        with conn.cursor() as cursor:
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS phonebook (
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
+            phone VARCHAR(11) UNIQUE NOT NULL
+            )""")
+
+        with conn.cursor() as cursor:
+            cursor.execute("""COPY phonebook
+            FROM 'C:\\Users\\Bekarys\\Desktop\\work\\hello\\tsis10\\book.csv'
+            DELIMITER ',' CSV HEADER;""")
+
 
         if choose == "insert":
             with conn.cursor() as cursor:
@@ -75,7 +79,7 @@ def connect():
             
 
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print("Error")
     finally:
         if conn is not None:
             print("done")
