@@ -4,7 +4,7 @@ import csv
 def connect():
     conn = None
     #You can choose insert|update|delete|check
-    print("insert|update|delete|check")
+    print("insert|update|delete|check or func")
     choose = input()
     if choose == "insert":
         print("type your first name")
@@ -26,11 +26,6 @@ def connect():
         conn = psycopg2.connect(host="localhost", database="suppliers", user="postgres", password="1234")
 
         conn.autocommit = True
-
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT version()")
-            version = cursor.fetchone()
-            print(version)
 
         with conn.cursor() as cursor:
             cursor.execute("""

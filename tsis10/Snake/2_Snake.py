@@ -21,7 +21,13 @@ def connect(username, score, level):
         
         if score != -1:
             with conn.cursor() as cursor:
-                cursor.execute("INSERT INTO user_score (username, score, level) VALUES('{}','{}',{})".format(username, score, level))
+                cursor.execute("SELECT * FROM user_score WHERE username = '{}'".format(username))
+                data = cursor.fetchone()
+                if data == None:
+                    cursor.execute("INSERT INTO user_score (username, score, level) VALUES('{}','{}',{})".format(username, score, level))
+                else:
+                    cursor.execute("UPDATE user_score SET score = %s WHERE username = %s;", (score, username))
+                    cursor.execute("UPDATE user_score SET level = %s WHERE username = %s;", (level, username))
         else:
             with conn.cursor() as cursor:
                 cursor.execute("SELECT * FROM user_score WHERE username = '{}'".format(username))
@@ -64,6 +70,7 @@ SCREEN_HEIGHT = Pixel*41
 Score = 0
 Level = 0
 TIME = 0
+temp = 0
 
 #Create a screen 
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
@@ -156,9 +163,11 @@ while True:
         Eat = True
         Snake_body.insert(0, list(Snake_head))
         Score += random.randint(0,5)
-        if Score%3==0:
+        temp += 1
+        if temp>=3:
             Snake_speed += 3
             Level += 1
+            temp = 0
     Snake_body.pop()
     
     #Draw
